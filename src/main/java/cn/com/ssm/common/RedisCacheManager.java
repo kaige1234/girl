@@ -1,7 +1,5 @@
 package cn.com.ssm.common;
 
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.concurrent.TimeUnit;
 
