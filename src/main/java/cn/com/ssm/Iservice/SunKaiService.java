@@ -4,6 +4,6 @@ public class SunKaiService {
     public static void main(){
         System.out.println("girl-feature-1-sk-11111");
         System.out.println("girl-feature-1-sk-22222");
-        System.out.println("girl-feature-1-sk-33333");
+        System.out.println("girl-3243242-1-sk-33333");
     }
 }
