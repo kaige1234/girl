@@ -31,14 +31,7 @@ public class IUserService implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    /**
-     * 登录接口
-     *
-     * @param userName
-     * @param password
-     * @return
-     * @throws Exception
-     */
+
     @Override
     public ServerResponse<User> login(String userName, String password) throws Exception {
         int userCount = userMapper.queryUserCount(userName);
