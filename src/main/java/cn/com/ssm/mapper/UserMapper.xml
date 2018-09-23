@@ -1,0 +1,128 @@
+    <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.ssm.mapper.UserMapper">
+    <!--<resultMap id="BaseResultMap" type="cn.com.ssm.vo.UserInfoVo">
+        <constructor>
+            <idArg column="id"  javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="username" jdbcType="java.lang.String" javaType="VARCHAR"/>
+            <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="phone" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="question" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="answer" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="role" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="updateTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>-->
+
+    <resultMap id="BaseResutMapUser" type="cn.com.ssm.vo.UserInfoVo">
+        <id column="id" property="id"></id>
+        <result column="username" property="username"></result>
+        <result column="password" property="password"></result>
+        <result column="email" property="email"></result>
+        <result column="phone" property="phone"></result>
+        <result column="question" property="question"></result>
+        <result column="answer" property="answer"></result>
+        <result column="role" property="role"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+    </resultMap>
+    <sql id="Base_column_list">
+        id,password ,email,phone,question ,answer ,role ,create_time ,update_time
+    </sql>
+
+    <select id="queryUserCount" resultType="int" parameterType="String">
+        SELECT COUNT(*) FROM mmall_user WHERE username = #{username}
+    </select>
+
+    <select id="selectLogin" resultMap="BaseResutMapUser" parameterType="map">
+        SELECT
+        <include refid="Base_column_list"/>
+        FROM
+        mmall_user
+        WHERE username =#{userName} AND password =#{password}
+    </select>
+
+    <select id="selectByPrimaryId" resultType="cn.com.ssm.pojo.User" parameterType="int">
+        select
+        <include refid="Base_column_list"></include>
+        from mmall_user WHERE id =#{id}
+    </select>
+
+    <select id="queryUserByEmail" resultType="int" parameterType="string">
+        SELECT COUNT(0) FROM mmall_user WHERE email =#{email}
+    </select>
+
+    <insert id="saveUserInfo" parameterType="user">
+        INSERT INTO mmall_user
+        ( username, password, email, phone, question, answer, role, create_time, update_time)
+        VALUES
+        ( #{username}, #{password},#{email},#{phone}, #{question}, #{answer},#{role},NOW(),NOW())
+    </insert>
+
+    <select id="selectQuestionByUserName" parameterType="string" resultType="string">
+      select question from mmall_user where username =#{userName}
+    </select>
+
+    <select id="checkAnswer" resultType="int" parameterType="map">
+        SELECT COUNT(1) FROM  mmall_user
+        WHERE username=#{userName}
+        AND question=#{question}
+        AND answer=#{answer}
+    </select>
+
+    <update id="updatePasswordByUsername" parameterType="map">
+        UPDATE mmall_user SET update_time = NOW(),password = #{password}
+        where username= #{username}
+    </update>
+
+    <select id="checkPassword" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM mmall_user WHERE password =#{passwordOld} and id =#{id}
+    </select>
+
+    <update id="updateAllUserInfo" parameterType="user" >
+        UPDATE mmall_user
+                SET
+                 username = #{username} ,
+                password = #{password} , email = #{email} ,
+                phone = #{phone} , question = #{question} ,
+                answer = #{answer} , role = #{role} ,
+                create_time = #{createTime} , update_time = #{updateTime}
+                WHERE id = #{id}
+    </update>
+
+    <update id="updateSelectUserInfo" parameterType="user">
+        UPDATE mmall_user
+        <set>
+            <if test="password != null || password !=''">
+                password = #{password} ,
+            </if>
+            <if test="email != null || email !=''">
+                email = #{email} ,
+            </if>
+            <if test="phone != null || phone !=''">
+                phone = #{phone} ,
+            </if>
+            <if test="question != null || question !=''">
+                username = #{question} ,
+            </if>
+            <if test="answer != null || answer !=''">
+                answer = #{answer} ,
+            </if>
+            <if test="role != null || role !=''">
+                role = #{role} ,
+            </if>
+                create_time = NOW() ,
+
+                update_time = NOW() ,
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <select id="checkEmailByUserId" parameterType="map" resultType="int">
+        SELECT COUNT(1) FROM mmall_user WHERE id !=#{userId} AND email =#{email}
+    </select>
+</mapper>
